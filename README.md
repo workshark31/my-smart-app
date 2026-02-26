@@ -1,1 +1,1 @@
-# my-smart-app.github.io
+# my-smart-app
