@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>SMART App</title>
+<script src="https://cdn.jsdelivr.net/npm/fhirclient/build/fhir-client.js"></script>
+</head>
+<body>
+
+<h3>Patient Data</h3>
+<pre id="patient">Loading...</pre>
+
+<script>
+FHIR.oauth2.ready().then(function(client) {
+
+    client.patient.read().then(function(pt) {
+        document.getElementById("patient").innerText =
+            JSON.stringify(pt, null, 2);
+    });
+
+}).catch(console.error);
+</script>
+
+</body>
+</html>
