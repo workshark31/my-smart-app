@@ -1,25 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>批次分析系統</title>
+<meta charset="UTF-8" />
+<title>SMART App</title>
+<script src="https://cdn.jsdelivr.net/npm/fhirclient/build/fhir-client.js"></script>
 </head>
 <body>
 
-<h1>FHIR 批次分析</h1>
-
-<button onclick="loadBatch()">批次抓取資料</button>
-
-<pre id="output"></pre>
+<h3>Patient Data</h3>
+<pre id="patient">Loading...</pre>
 
 <script>
-function loadBatch() {
-    fetch('http://127.0.0.1:5000/batch-analysis')
-        .then(res => res.json())
-        .then(data => {
-            document.getElementById("output").textContent =
-                JSON.stringify(data, null, 2);
-        });
-}
+FHIR.oauth2.ready().then(function(client) {
+
+    client.patient.read().then(function(pt) {
+        document.getElementById("patient").innerText =
+            JSON.stringify(pt, null, 2);
+    });
+
+}).catch(console.error);
 </script>
 
 </body>
