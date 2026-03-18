@@ -1,102 +1,25 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-
-<meta charset="UTF-8">
-
-<title>SMART Demo</title>
-
+<meta charset="UTF-8" />
+<title>SMART App</title>
 <script src="https://cdn.jsdelivr.net/npm/fhirclient/build/fhir-client.js"></script>
-
-<style>
-
-body{
-font-family: Arial;
-background:#f4f6f8;
-padding:20px;
-}
-
-.card{
-background:white;
-padding:20px;
-margin:20px 0;
-border-radius:10px;
-box-shadow:0 3px 10px rgba(0,0,0,0.1);
-}
-
-</style>
-
 </head>
-
 <body>
 
-<h2>SMART on FHIR Demo</h2>
-
-<div class="card">
-
-<h3>Patient Information</h3>
-
-<p><b>Name:</b> <span id="name"></span></p>
-<p><b>Gender:</b> <span id="gender"></span></p>
-<p><b>Birth Date:</b> <span id="birth"></span></p>
-
-</div>
-
-<div class="card">
-
-<h3>Medication List</h3>
-
-<ul id="meds"></ul>
-
-</div>
+<h3>Patient Data</h3>
+<pre id="patient">Loading...</pre>
 
 <script>
+FHIR.oauth2.ready().then(function(client) {
 
-FHIR.oauth2.ready().then(function(client){
+    client.patient.read().then(function(pt) {
+        document.getElementById("patient").innerText =
+            JSON.stringify(pt, null, 2);
+    });
 
-client.patient.read().then(function(pt){
-
-let name = pt.name[0].given.join(" ") + " " + pt.name[0].family;
-
-document.getElementById("name").innerText = name;
-
-document.getElementById("gender").innerText = pt.gender;
-
-document.getElementById("birth").innerText = pt.birthDate;
-
-});
-
-client.request("/MedicationRequest?patient="+client.patient.id)
-
-.then(function(data){
-
-let list = document.getElementById("meds");
-
-data.entry.forEach(function(item){
-
-let med = item.resource.medicationCodeableConcept;
-
-let name = med?.text || "Unknown Medication";
-
-let li = document.createElement("li");
-
-li.innerText = name;
-
-list.appendChild(li);
-
-});
-
-});
-
-});
-
+}).catch(console.error);
 </script>
 
 </body>
-
-<<<<<<< HEAD
 </html>
-=======
-</html>
->>>>>>> acf6d9d93ca918cceff3972451feda9dc6537659
